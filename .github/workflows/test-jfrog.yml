@@ -1,0 +1,11 @@
+-uses: jfrog/setup-jfrog-cli@V3
+
+env:
+  # JFrog Platform URL
+  JF_URL: https://chcsanofi.jfrog.io/
+
+  # JFrog Credentials
+  JF_USER: tarund1222@gmail.com
+  JF_ACCESS_TOKEN: AP83pq2YDvZTGB4GN2SDDoQPg3r
+-run: |
+   jf rt ping
