@@ -5,6 +5,7 @@ on:
 
 -uses: jfrog/setup-jfrog-cli@V3
 
+#Testing the Connection
 env:
   # JFrog Platform URL
   JF_URL: https://chcsanofi.jfrog.io/
