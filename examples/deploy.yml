@@ -1,0 +1,48 @@
+# Assignment: CI / CD - Flask webapp with Docker & GitHub Actions
+# Date: 09/21/2022
+# "Hey Siri, play September by Earth, Wind & Fire"
+# Author: derekYankie
+
+# This workflow will publish a Flask webapp as an image to Docker Hub
+# Using Github Actions
+name: Push the Flask Webapp to Docker Hub
+
+# Track changes and build a new image 
+# when changes are committed to the repo
+on:
+  - push
+
+
+jobs:
+
+  build:
+    name: CI Build
+
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: CI Message
+      run: echo "Preparing build!"
+      
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag flask-github-actions-app:v1
+    
+    - name: List images
+      run: docker images 
+    
+    - name: Tag Docker image
+      run: docker tag flask-github-actions-app:v1 ${{ secrets.DOCKER_USERNAME }}/flask-github-actions-app:v2
+    
+    - name: Build Message
+      run: echo "Docker image built successfully!"
+      
+    - name: Push into Docker Hub
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/flask-github-actions-app:v2
