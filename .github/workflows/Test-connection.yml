@@ -1,0 +1,29 @@
+name: Test Connection
+
+on:
+  push:
+    branches:
+      - test-connection
+
+env:
+  WORKSPACE: ${{ github.workspace }}
+  HTTP_PROXY: 'http://emea-aws-webproxy.service.cloud.local:3128'
+  HTTPS_PROXY: 'http://emea-aws-webproxy.service.cloud.local:3128'
+  no_proxy: "'*.tibco.com','*.mashery.com'"
+
+jobs:
+  Test:
+    runs-on: [Linux, X64, sanofi-chc-github_standalone_runner_01]
+    # runs on: ['self-hosted', 'sanofi-chc-github_standalone_runner_01']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+          submodules: 'true'
+          ref: test-connection
+
+      - name: Test Connection
+        run: |
+          cd $WORKSPACE
+          bash cicd/connection.sh
