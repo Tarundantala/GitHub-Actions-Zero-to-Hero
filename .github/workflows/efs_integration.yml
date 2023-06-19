@@ -1,0 +1,32 @@
+name: EFS Integration
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  deploy:
+    runs-on: ubutnu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Install NFS utilities
+        run: sudo apt-get update && sudo apt-get install -y nfs-common
+        
+      - name: Mount EFS1
+        run: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,time=600,retrans=2 <fs-0adfa763c64d8157a.efs.us-east-1.amazonaws.com>:/ /mnt/efs1
+        #fs-0adfa763c64d8157a.efs.us-east-1.amazonaws.com
+        #fs-0308c9bcaaf5156a5.efs.eu-west-1.amazonaws.com
+        
+      #- name: Mount EFS2
+       # run: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,time=600,retrans=2 <EFS_MOUNT_TARGET_IP>:/ /mnt/efs2
+        
+      - name: List contents of EFS1
+        run: ls -l /mnt/efs1
+        
+      #- name: Lets contents of EFS2
+        #run: ls -l /mnt/efs1
+        
